@@ -55,17 +55,21 @@ function show_status() {
         white="\033[0;37m"
 
         color=red
+        padding=""
         if (hours_behind < -12) { # More than 12 hours ahead
           color=green
         } else if (hours_behind < 0) { # Ahead
           color=white
         } else if (hours_behind < 12) { # Less than 12 hours behind
+          padding=" "
           color=yellow
         } else { # More than 12 hours behind
+          padding=" "
           color=red
         }
 
         printf color
+        printf padding
         print $0 "\033[0m"
       }'
 }
