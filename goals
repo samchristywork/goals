@@ -2,6 +2,29 @@
 
 filename="$HOME/goals.txt"
 
+function add_goal() {
+  DATE=$(date +%s)
+
+  (
+  echo "Start: $DATE"
+  echo "Name: "
+  echo "Initial: "
+  echo "Rate: "
+  echo "Command: "
+  ) > /tmp/goal.txt
+
+  $EDITOR /tmp/goal.txt
+
+  if [ -s /tmp/goal.txt ]; then
+    sed 's/.\+: //g' < /tmp/goal.txt | \
+      tr '\n' '\t' | \
+      sed 's/\t$/\n/g' >> "$filename"
+          echo "Added to $filename"
+        else
+          echo "No changes made"
+  fi
+}
+
 if [ $# -eq 0 ]; then
   show_status
   exit 0
