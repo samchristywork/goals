@@ -1,6 +1,7 @@
 #!/bin/bash
 
 filename="$HOME/goals.txt"
+tmpfile="/tmp/goals.txt"
 
 function add_goal() {
   DATE=$(date +%s)
@@ -9,15 +10,15 @@ function add_goal() {
   echo "Start: $DATE"
   echo "Name: "
   echo "Initial: "
-  echo "Rate: "
+  echo "Rate per day: "
   echo "Command: "
-  ) > /tmp/goal.txt
+  ) > "$tmpfile"
 
-  $EDITOR /tmp/goal.txt
+  $EDITOR "$tmpfile"
 
-  if [ -s /tmp/goal.txt ]; then
-    sed 's/.\+: //g' < /tmp/goal.txt | \
-      tr '\n' '\t' | \
+  if [ -s "$tmpfile" ]; then
+    sed 's/.\+: //g' < "$tmpfile" |
+      tr '\n' '\t' |
       sed 's/\t$/\n/g' >> "$filename"
           echo "Added to $filename"
         else
