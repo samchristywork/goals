@@ -25,6 +25,26 @@ function add_goal() {
   fi
 }
 
+function show_status() {
+  DATE=$(date +%s)
+  awk -v date="$DATE" -F '\t' '
+  {
+    start=$1
+    name=$2
+    initial=$3
+    rate=$4
+    command=$5
+    projected=(date-start)*rate/86400+initial
+    command | getline actual
+    close(command)
+    difference=projected-actual
+    hours_behind=difference/rate*24
+
+    print name, projected, actual, difference, hours_behind
+  }
+    ' "$filename"
+}
+
 if [ $# -eq 0 ]; then
   show_status
   exit 0
