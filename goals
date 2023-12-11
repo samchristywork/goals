@@ -82,6 +82,7 @@ case "$1" in
     echo "  add"
     echo "  show"
     echo "  edit"
+    echo "  watch"
     echo "  help"
     ;;
   add)
@@ -92,6 +93,9 @@ case "$1" in
     ;;
   edit)
     $EDITOR "$filename"
+    ;;
+  watch)
+    watch -c "$0 show"
     ;;
   *)
     echo "Invalid command"
