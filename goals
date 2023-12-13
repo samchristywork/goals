@@ -28,7 +28,7 @@ function add_goal() {
 
 function show_status() {
   DATE=$(date +%s)
-  printf "Behind\tProj\tActual\tDiff\tName\n"
+  printf "Behind  Projected  Actual  Difference  Name\n"
   awk -v date="$DATE" -F '\t' '
   {
     start=$1
@@ -42,7 +42,7 @@ function show_status() {
     difference=projected-actual
     hours_behind=difference/rate*24
 
-    printf "%2.1f\t%2.1f\t%2.1f\t%2.1f\t%s\n",
+    printf "%6.0f %10.0f %7.0f %11.0f  %s\n",
       hours_behind, projected, actual, difference, name
   }
     ' "$filename" | sort -h --reverse | \
@@ -55,21 +55,17 @@ function show_status() {
         white="\033[0;37m"
 
         color=red
-        padding=""
         if (hours_behind < -12) { # More than 12 hours ahead
           color=green
         } else if (hours_behind < 0) { # Ahead
           color=white
         } else if (hours_behind < 12) { # Less than 12 hours behind
-          padding=" "
           color=yellow
         } else { # More than 12 hours behind
-          padding=" "
           color=red
         }
 
         printf color
-        printf padding
         print $0 "\033[0m"
       }'
 }
