@@ -93,7 +93,7 @@ case "$1" in
     echo "  add"
     echo "  show"
     echo "  edit"
-    echo "  watch"
+    echo "  watch <n>"
     echo "  help"
     ;;
   add)
@@ -106,7 +106,13 @@ case "$1" in
     $EDITOR "$filename"
     ;;
   watch)
-    watch -c "$0 show"
+    n=1
+
+    if [ $# -eq 2 ]; then
+      n="$2"
+    fi
+
+    watch -n "$n" -c "$0 show"
     ;;
   *)
     echo "Invalid command"
