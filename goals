@@ -30,7 +30,7 @@ function show_status() {
   DATE=$(date +%s)
   printf "Behind  Projected  Actual  Difference  Name\n"
   awk -v date="$DATE" -F '\t' '
-  function eval(expr,        cmd, result) {
+  function eval(expr, cmd, result) {
       cmd = "echo \"" expr "\" | bc -l"
       cmd | getline result
       close(cmd)
@@ -46,7 +46,12 @@ function show_status() {
     command | getline actual
     close(command)
     difference=projected-actual
-    hours_behind=difference/rate*24
+
+    if (rate == 0) {
+      hours_behind=0
+    } else {
+      hours_behind=difference/rate*24
+    }
 
     printf "%6.0f %10.0f %7.0f %11.0f  %s\n",
       hours_behind, projected, actual, difference, name
