@@ -48,7 +48,11 @@ function show_status() {
     difference=projected-actual
 
     if (rate == 0) {
-      hours_behind=0
+      if (difference < 0) {
+        hours_behind = 999
+      } else {
+        hours_behind = -999
+      }
     } else {
       hours_behind=difference/rate*24
     }
