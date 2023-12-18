@@ -94,11 +94,11 @@ case "$1" in
   help)
     echo "Usage: $0 <command>"
     echo "Commands:"
-    echo "  add"
-    echo "  show"
-    echo "  edit"
-    echo "  watch <n>"
-    echo "  help"
+    echo "  add - add a new goal"
+    echo "  show - show all goals"
+    echo "  edit - edit the goal file"
+    echo "  watch <n> - watch the goal file for changes"
+    echo "  help - show this help"
     ;;
   add)
     add_goal
