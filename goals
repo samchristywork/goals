@@ -1,6 +1,6 @@
 #!/bin/bash
 
-filename="$HOME/goals.txt"
+filename="$HOME/.goals"
 tmpfile="/tmp/goals.txt"
 
 function add_goal() {
@@ -28,7 +28,7 @@ function add_goal() {
 
 function show_status() {
   DATE=$(date +%s)
-  printf "Behind  Projected  Actual  Difference  Name\n"
+  printf "Behin Proje Actua Diffe Name\n"
   awk -v date="$DATE" -F '\t' '
   function eval(expr, cmd, result) {
       cmd = "echo \"" expr "\" | bc -l"
@@ -57,7 +57,7 @@ function show_status() {
       hours_behind=difference/rate*24
     }
 
-    printf "%6.0f %10.0f %7.0f %11.0f  %s\n",
+    printf "%5.0f %5.0f %5.0f %5.0f %s\n",
       hours_behind, projected, actual, difference, name
   }
     ' "$filename" | sort -h --reverse | \
