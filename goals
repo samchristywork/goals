@@ -109,7 +109,11 @@ case "$1" in
     add_goal
     ;;
   show)
-    show_status
+    if [ $# -eq 2 ]; then
+      show_status "$2"
+    else
+      show_status
+    fi
     ;;
   edit)
     $EDITOR "$filename"
