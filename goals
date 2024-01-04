@@ -28,6 +28,11 @@ function add_goal() {
 
 function show_status() {
   DATE=$(date +%s)
+
+  if [ $# -eq 1 ]; then
+    DATE=$(date -d "$1" +%s)
+  fi
+
   printf "Behin Proje Actua Diffe Name\n"
   awk -v date="$DATE" -F '\t' '
   function eval(expr, cmd, result) {
