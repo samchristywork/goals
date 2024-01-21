@@ -33,7 +33,7 @@ function show_status() {
     DATE=$(date -d "$1" +%s)
   fi
 
-  printf "Behin Proje Actua Diffe Name\n"
+  printf "Behind Proje Actua Diff Name\n"
   awk -v date="$DATE" -F '\t' '
   function eval(expr, cmd, result) {
       cmd = "echo \"" expr "\" | bc -l"
@@ -62,7 +62,7 @@ function show_status() {
       hours_behind=difference/rate*24
     }
 
-    printf "%5.0f %5.0f %5.0f %5.0f %s\n",
+    printf "%6.1f %5.0f %5.0f %4.0f %s\n",
       hours_behind, projected, actual, difference, name
   }
     ' "$filename" | sort -h --reverse | \
