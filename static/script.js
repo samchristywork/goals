@@ -1,26 +1,30 @@
-let currentDateTime = new Date();
-let currentDateTimeValue = new Date(currentDateTime.getTime() - currentDateTime.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-let tommorowDateTime = new Date(currentDateTime.getTime() - currentDateTime.getTimezoneOffset() * 60000 + 24 * 60 * 60 * 1000).toISOString().slice(0, 16);
+let now = new Date();
+now = now.getTime() - now.getTimezoneOffset() * 60000;
+let currentDateTimeValue = new Date(now)
+        .toISOString()
+        .slice(0, 16);
+
+let tommorowDateTime = new Date(now + 24 * 60 * 60 * 1000)
+        .toISOString()
+        .slice(0, 16);
 
 document.getElementById("startDateTimePicker").value = currentDateTimeValue;
 document.getElementById("endDateTimePicker").value = tommorowDateTime;
 
 function addGoal() {
   fetch("/add-goal", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+    method : "POST",
+    headers : {
+      "Content-Type" : "application/json",
     },
-    body: JSON.stringify({
-      name: document.getElementById("name").value,
-      startAmount: document.getElementById("startAmount").value,
-      endAmount: document.getElementById("endAmount").value,
-      startTimestamp: document.getElementById("startDateTimePicker").value,
-      endTimestamp: document.getElementById("endDateTimePicker").value,
+    body : JSON.stringify({
+      name : document.getElementById("name").value,
+      startAmount : document.getElementById("startAmount").value,
+      endAmount : document.getElementById("endAmount").value,
+      startTimestamp : document.getElementById("startDateTimePicker").value,
+      endTimestamp : document.getElementById("endDateTimePicker").value,
     }),
-  }).then(() => {
-    window.location.reload();
-  });
+  }).then(() => { window.location.reload(); });
 }
 
 function formatTime(hours) {
@@ -41,7 +45,7 @@ function updateGoals() {
   }
   const goalsElement = document.getElementById("goals");
 
-  for (let i=0;i<goals.length;i++) {
+  for (let i = 0; i < goals.length; i++) {
     let goal = goals[i];
     let currentTime = new Date().getTime();
     let startTime = new Date(goal.startTimestamp).getTime();
@@ -57,9 +61,12 @@ function updateGoals() {
     goal.ahead = -(goal.predicted - currentAmount) / (amountDiff / timeDiff) / 3600000;
   }
 
-  goals.sort(function(a,b) {
-    if (a.ahead < b.ahead) return -1;
-    if (a.ahead > b.ahead) return 1;
+  goals.sort(function(a, b) {
+    if (a.ahead < b.ahead) {
+      return -1;
+    } else if (a.ahead > b.ahead) {
+      return 1;
+    }
     return 0;
   });
 
@@ -78,7 +85,7 @@ function updateGoals() {
       </tr>
   `;
 
-  for(let i=0;i<goals.length;i++) {
+  for (let i = 0; i < goals.length; i++) {
     let goal = goals[i];
     html += `
       <tr class="${goal.ahead < 0 ? "behind" : ""}">
@@ -100,12 +107,10 @@ function updateGoals() {
 }
 
 function loadGoals() {
-  fetch("/goals")
-    .then((response) => response.json())
-    .then((goals) => {
-      globalGoals = goals;
-      updateGoals();
-    });
+  fetch("/goals").then((response) => response.json()).then((goals) => {
+    globalGoals = goals;
+    updateGoals();
+  });
 }
 
 function updateField(name, column, value) {
@@ -117,18 +122,16 @@ function updateField(name, column, value) {
   console.log(name, column, value, newValue);
 
   fetch("/update-field", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+    method : "POST",
+    headers : {
+      "Content-Type" : "application/json",
     },
-    body: JSON.stringify({
-      name: name,
-      column: column,
-      value: newValue,
+    body : JSON.stringify({
+      name : name,
+      column : column,
+      value : newValue,
     }),
-  }).then(() => {
-    window.location.reload();
-  });
+  }).then(() => { window.location.reload(); });
 }
 
 function deleteGoal(name) {
@@ -138,16 +141,14 @@ function deleteGoal(name) {
   }
 
   fetch("/delete-goal", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+    method : "POST",
+    headers : {
+      "Content-Type" : "application/json",
     },
-    body: JSON.stringify({
-      name: name,
+    body : JSON.stringify({
+      name : name,
     }),
-  }).then(() => {
-    window.location.reload();
-  });
+  }).then(() => { window.location.reload(); });
 }
 
 loadGoals();
