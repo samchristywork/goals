@@ -80,6 +80,29 @@ function updateGoals() {
     return;
   }
   const goalsElement = document.getElementById("goals");
+
+  for (let i=0;i<goals.length;i++) {
+    let goal = goals[i];
+    let currentTime = new Date().getTime();
+    let startTime = new Date(goal.startTimestamp).getTime();
+    let endTime = new Date(goal.endTimestamp).getTime();
+    let startAmount = parseFloat(goal.startAmount);
+    let endAmount = parseFloat(goal.endAmount);
+    let currentAmount = parseFloat(goal.currentAmount);
+
+    let timeDiff = endTime - startTime;
+    let amountDiff = endAmount - startAmount;
+    let percentComplete = (currentTime - startTime) / timeDiff;
+    goal.predicted = startAmount + amountDiff * percentComplete;
+    goal.ahead = -(goal.predicted - currentAmount) / (amountDiff / timeDiff) / 3600000;
+  }
+
+  goals.sort(function(a,b) {
+    if (a.ahead < b.ahead) return -1;
+    if (a.ahead > b.ahead) return 1;
+    return 0;
+  });
+
   html = `
     <table>
       <tr>
@@ -95,34 +118,23 @@ function updateGoals() {
       </tr>
   `;
 
-  goals.forEach((goal) => {
-    let currentTime = new Date().getTime();
-    let startTime = new Date(goal.startTimestamp).getTime();
-    let endTime = new Date(goal.endTimestamp).getTime();
-    let startAmount = parseFloat(goal.startAmount);
-    let endAmount = parseFloat(goal.endAmount);
-    let currentAmount = parseFloat(goal.currentAmount);
-
-    let timeDiff = endTime - startTime;
-    let amountDiff = endAmount - startAmount;
-    let percentComplete = (currentTime - startTime) / timeDiff;
-    let predicted = startAmount + amountDiff * percentComplete;
-    let ahead = -(predicted - currentAmount) / (amountDiff / timeDiff) / 3600000;
-
+  for(let i=0;i<goals.length;i++) {
+    let goal = goals[i];
     html += `
-      <tr class="${ahead < 0 ? "behind" : ""}">
+      <tr class="${goal.ahead < 0 ? "behind" : ""}">
         <td onclick="updateField('${goal.name}', 'name', '${goal.name}')">${goal.name}</td>
         <td onclick="updateField('${goal.name}', 'startAmount', '${goal.startAmount}')">${goal.startAmount}</td>
         <td onclick="updateField('${goal.name}', 'endAmount', '${goal.endAmount}')">${goal.endAmount}</td>
         <td onclick="updateField('${goal.name}', 'startTimestamp', '${goal.startTimestamp}')">${goal.startTimestamp.replace("T", " ").replace("Z", "")}</td>
         <td onclick="updateField('${goal.name}', 'endTimestamp', '${goal.endTimestamp}')">${goal.endTimestamp.replace("T", " ").replace("Z", "")}</td>
         <td onclick="updateField('${goal.name}', 'currentAmount', '${goal.currentAmount}')">${goal.currentAmount}</td>
-        <td>${predicted.toFixed(2)}</td>
-        <td>${formatTime(ahead)}</td>
+        <td>${goal.predicted.toFixed(2)}</td>
+        <td>${formatTime(goal.ahead)}</td>
         <td><button onclick="deleteGoal('${goal.name}')">Delete</button></td>
       </tr>
     `;
-  });
+  }
+
   html += "</table>";
   goalsElement.innerHTML = html;
 }
