@@ -1,8 +1,9 @@
 let currentDateTime = new Date();
 let currentDateTimeValue = new Date(currentDateTime.getTime() - currentDateTime.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+let tommorowDateTime = new Date(currentDateTime.getTime() - currentDateTime.getTimezoneOffset() * 60000 + 24 * 60 * 60 * 1000).toISOString().slice(0, 16);
 
 document.getElementById("startDateTimePicker").value = currentDateTimeValue;
-document.getElementById("endDateTimePicker").value = currentDateTimeValue;
+document.getElementById("endDateTimePicker").value = tommorowDateTime;
 
 function addGoal() {
   fetch("/add-goal", {
@@ -70,8 +71,8 @@ function updateGoals() {
         <th>End Amt</th>
         <th>Start Time</th>
         <th>End Time</th>
-        <th>Current Amt</th>
-        <th>Predicted Amt</th>
+        <th>Current</th>
+        <th>Predicted</th>
         <th>Hours Ahead</th>
         <th></th>
       </tr>
@@ -84,8 +85,8 @@ function updateGoals() {
         <td onclick="updateField('${goal.name}', 'name', '${goal.name}')">${goal.name}</td>
         <td onclick="updateField('${goal.name}', 'startAmount', '${goal.startAmount}')">${goal.startAmount}</td>
         <td onclick="updateField('${goal.name}', 'endAmount', '${goal.endAmount}')">${goal.endAmount}</td>
-        <td onclick="updateField('${goal.name}', 'startTimestamp', '${goal.startTimestamp}')">${goal.startTimestamp.replace("T", " ").replace("Z", "")}</td>
-        <td onclick="updateField('${goal.name}', 'endTimestamp', '${goal.endTimestamp}')">${goal.endTimestamp.replace("T", " ").replace("Z", "")}</td>
+        <td onclick="updateField('${goal.name}', 'startTimestamp', '${goal.startTimestamp}')">${goal.startTimestamp.replace("T", " ").replace("Z", "").replace("2024-", "")}</td>
+        <td onclick="updateField('${goal.name}', 'endTimestamp', '${goal.endTimestamp}')">${goal.endTimestamp.replace("T", " ").replace("Z", "").replace("2024-", "")}</td>
         <td onclick="updateField('${goal.name}', 'currentAmount', '${goal.currentAmount}')">${goal.currentAmount}</td>
         <td>${goal.predicted.toFixed(2)}</td>
         <td>${formatTime(goal.ahead)}</td>
