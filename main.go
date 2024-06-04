@@ -57,6 +57,10 @@ func main() {
 		http.ServeFile(w, r, "static/style.css")
 	})
 
+	http.HandleFunc("/script.js", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "static/script.js")
+	})
+
 	http.HandleFunc("/goals", func(w http.ResponseWriter, r *http.Request) {
 		rows, err := db.Query("SELECT name, startTimestamp, startAmount, endTimestamp, endAmount, currentAmount FROM goals")
 		if err != nil {
