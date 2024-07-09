@@ -23,6 +23,7 @@ function addGoal() {
       endAmount : document.getElementById("endAmount").value,
       startTimestamp : document.getElementById("startDateTimePicker").value,
       endTimestamp : document.getElementById("endDateTimePicker").value,
+      cost : document.getElementById("cost").value,
     }),
   }).then(() => { window.location.reload(); });
 }
@@ -81,6 +82,7 @@ function updateGoals() {
         <th>Current</th>
         <th>Predicted</th>
         <th>Hours Ahead</th>
+        <th>Cost</th>
         <th></th>
       </tr>
   `;
@@ -92,11 +94,12 @@ function updateGoals() {
         <td onclick="updateField('${goal.name}', 'name', '${goal.name}')">${goal.name}</td>
         <td onclick="updateField('${goal.name}', 'startAmount', '${goal.startAmount}')">${goal.startAmount}</td>
         <td onclick="updateField('${goal.name}', 'endAmount', '${goal.endAmount}')">${goal.endAmount}</td>
-        <td onclick="updateField('${goal.name}', 'startTimestamp', '${goal.startTimestamp}')">${goal.startTimestamp.replace("T", " ").replace("Z", "").replace("2024-", "")}</td>
-        <td onclick="updateField('${goal.name}', 'endTimestamp', '${goal.endTimestamp}')">${goal.endTimestamp.replace("T", " ").replace("Z", "").replace("2024-", "")}</td>
+        <td onclick="updateField('${goal.name}', 'startTimestamp', '${goal.startTimestamp}')">${goal.startTimestamp.replace("T", " ").replace("Z", "").slice(5)}</td>
+        <td onclick="updateField('${goal.name}', 'endTimestamp', '${goal.endTimestamp}')">${goal.endTimestamp.replace("T", " ").replace("Z", "").slice(5)}</td>
         <td onclick="updateField('${goal.name}', 'currentAmount', '${goal.currentAmount}')">${goal.currentAmount}</td>
         <td>${goal.predicted.toFixed(2)}</td>
         <td>${formatTime(goal.ahead)}</td>
+        <td onclick="updateField('${goal.name}', 'cost', '${goal.cost}')">${goal.cost}</td>
         <td><button onclick="deleteGoal('${goal.name}')">Delete</button></td>
       </tr>
     `;

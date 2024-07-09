@@ -17,6 +17,7 @@ type Goal struct {
 	EndTimestamp   string `json:"endTimestamp"`
 	EndAmount      string `json:"endAmount"`
 	CurrentAmount  string `json:"currentAmount"`
+	Cost           string `json:"cost"`
 }
 
 type UpdateField struct {
@@ -43,7 +44,7 @@ func main() {
 	}
 	defer db.Close()
 
-	_, err = db.Exec("CREATE TABLE IF NOT EXISTS goals (name TEXT, startTimestamp INTEGER, startAmount REAL, endTimestamp INTEGER, endAmount REAL, currentAmount REAL)")
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS goals (name TEXT, startTimestamp INTEGER, startAmount REAL, endTimestamp INTEGER, endAmount REAL, currentAmount REAL, cost REAL)")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -62,7 +63,7 @@ func main() {
 	})
 
 	http.HandleFunc("/goals", func(w http.ResponseWriter, r *http.Request) {
-		rows, err := db.Query("SELECT name, startTimestamp, startAmount, endTimestamp, endAmount, currentAmount FROM goals")
+		rows, err := db.Query("SELECT name, startTimestamp, startAmount, endTimestamp, endAmount, currentAmount, cost FROM goals")
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -72,7 +73,7 @@ func main() {
 		var goals []Goal
 		for rows.Next() {
 			var goal Goal
-			rows.Scan(&goal.Name, &goal.StartTimestamp, &goal.StartAmount, &goal.EndTimestamp, &goal.EndAmount, &goal.CurrentAmount)
+			rows.Scan(&goal.Name, &goal.StartTimestamp, &goal.StartAmount, &goal.EndTimestamp, &goal.EndAmount, &goal.CurrentAmount, &goal.Cost)
 			goals = append(goals, goal)
 		}
 
@@ -94,7 +95,7 @@ func main() {
 			return
 		}
 
-		_, err = db.Exec("INSERT INTO goals (name, startTimestamp, startAmount, endTimestamp, endAmount, currentAmount) VALUES (?, ?, ?, ?, ?, ?)", goal.Name, goal.StartTimestamp, goal.StartAmount, goal.EndTimestamp, goal.EndAmount, goal.StartAmount)
+		_, err = db.Exec("INSERT INTO goals (name, startTimestamp, startAmount, endTimestamp, endAmount, currentAmount, cost) VALUES (?, ?, ?, ?, ?, ?, ?)", goal.Name, goal.StartTimestamp, goal.StartAmount, goal.EndTimestamp, goal.EndAmount, goal.StartAmount, goal.Cost)
 		if err != nil {
 			fmt.Println(err)
 			return
