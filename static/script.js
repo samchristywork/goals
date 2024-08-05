@@ -60,6 +60,7 @@ function updateGoals() {
     let percentComplete = (currentTime - startTime) / timeDiff;
     goal.predicted = startAmount + amountDiff * percentComplete;
     goal.ahead = -(goal.predicted - currentAmount) / (amountDiff / timeDiff) / 3600000;
+    goal.perDay = amountDiff / timeDiff * 86400000;
   }
 
   goals.sort(function(a, b) {
@@ -82,7 +83,8 @@ function updateGoals() {
         <th>Current</th>
         <th>Predicted</th>
         <th>Hours Ahead</th>
-        <th>Cost</th>
+        <th>Cost (min)</th>
+        <th>Per Day</th>
         <th></th>
       </tr>
   `;
@@ -99,7 +101,8 @@ function updateGoals() {
         <td onclick="updateField('${goal.name}', 'currentAmount', '${goal.currentAmount}')">${goal.currentAmount}</td>
         <td>${goal.predicted.toFixed(2)}</td>
         <td>${formatTime(goal.ahead)}</td>
-        <td onclick="updateField('${goal.name}', 'cost', '${goal.cost}')">${goal.cost}</td>
+        <td onclick="updateField('${goal.name}', 'cost', '${goal.cost}')">${goal.cost == 0 ? "N/A" : goal.cost}</td>
+        <td>${goal.perDay.toFixed(2)}</td>
         <td><button onclick="deleteGoal('${goal.name}')">Delete</button></td>
       </tr>
     `;
